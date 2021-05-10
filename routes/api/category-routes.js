@@ -59,14 +59,20 @@ router.put('/:id', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-    try {
-
-
-
-        res.status(200).json(categoryData);
-    } catch (err) {
-        res.status(500).json(err);
+  try {
+    const results = await Category.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!results) {
+      res.status(404).json({ message: `No category found with id ${req.params.id}` });
+      return;
     }
+    res.status(200).json(results);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
